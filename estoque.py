@@ -823,36 +823,60 @@ def abrir_estoque():
     notebook.bind("<<NotebookTabChanged>>", on_tab_changed) 
     janela.mainloop()
 
-# TELA DE LOGIN
+
 def login():
     
     login_window = tk.Tk()
     login_window.title("Login")
-    login_window.geometry("400x300")  
-    login_window.resizable(False, False)  
+    login_window.geometry("400x300")
+    login_window.resizable(False, False)
+    login_window.eval('tk::PlaceWindow %s center' % login_window.winfo_toplevel())
+
+    # Carrega a imagem de fundo
+    imagem = Image.open("tela.jpg") 
+    imagem = imagem.resize((400, 300), Image.Resampling.LANCZOS)
+    imagem_fundo = ImageTk.PhotoImage(imagem)
+
+    background_label = tk.Label(login_window, image=imagem_fundo)
+    background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+    # Configura estilo dos widgets
     style = ttk.Style()
     style.configure("TButton", font=("Arial", 12), padding=10)
     style.configure("TLabel", font=("Arial", 12))
-    login_window.eval('tk::PlaceWindow %s center' % login_window.winfo_toplevel())
-    login_window.configure(bg="#f0f0f0")
-    titulo = ttk.Label(login_window, text="Bem-vindo", font=("Arial", 16, "bold"))
-    titulo.pack(pady=20)
-    ttk.Label(login_window, text="Usuário:").pack(pady=5)
-    entrada_usuario = ttk.Entry(login_window, font=("Arial", 12), width=30)
-    entrada_usuario.pack(pady=5)
-    ttk.Label(login_window, text="Senha:").pack(pady=5)
-    entrada_senha = ttk.Entry(login_window, show="*", font=("Arial", 12), width=30)
-    entrada_senha.pack(pady=5)
+
+    titulo = tk.Label(login_window, text="Bem-vindo", font=("Arial", 16, "bold"),
+                      bg="white", fg="black")
+    titulo.place(x=135, y=20)
+
+    label_usuario = tk.Label(login_window, text="Usuário:", font=("Arial", 12), bg="white")
+    label_usuario.place(x=50, y=70)
+
+    entrada_usuario = tk.Entry(login_window, font=("Arial", 12), width=30, bg="white")
+    entrada_usuario.place(x=50, y=95)
+
+    label_senha = tk.Label(login_window, text="Senha:", font=("Arial", 12), bg="white")
+    label_senha.place(x=50, y=130)
+
+    entrada_senha = tk.Entry(login_window, show="*", font=("Arial", 12), width=30, bg="white")
+    entrada_senha.place(x=50, y=155)
+
+    # Função de verificação de login
     def verificar_login():
         usuario = entrada_usuario.get().strip()
         senha = entrada_senha.get().strip()
         if usuario == "admin" and senha == "admin":
             login_window.destroy()
-            abrir_estoque() 
+            abrir_estoque()
         else:
             messagebox.showerror("Erro de Login", "Usuário ou senha incorretos!")
-    ttk.Button(login_window, text="Entrar", command=verificar_login).pack(pady=20)
+
+    botao_entrar = tk.Button(login_window, text="Entrar", command=verificar_login,
+                             font=("Arial", 12), bg="white")
+    botao_entrar.place(x=160, y=200)
+
     login_window.mainloop()
 
 if __name__ == "__main__":
     login()
+    
